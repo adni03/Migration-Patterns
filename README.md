@@ -1,8 +1,7 @@
 # CMU Interactive Data Science Assigment 3
 
-* **Team members**: abytha@andrew.cmu.edu and snittala@andrew.cmu.edu (Update XXXX with your team's emails)
-* **Online URL**: https://share.streamlit.io/CMU-IDS-Fall-2022/abnormal_distribution/master/streamlit_app.py (Update YYYY with your repo name)
-
+* **Team members**: abytha@andrew.cmu.edu and snittala@andrew.cmu.edu
+* **Online URL**: https://share.streamlit.io/CMU-IDS-Fall-2022/abnormal_distribution/master/streamlit_app.py
 ## Instructions
 
 ### Run Locally
