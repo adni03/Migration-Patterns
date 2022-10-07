@@ -1,6 +1,6 @@
 # CMU Interactive Data Science Assigment 3
 
-* **Team members**: XXXX@andrew.cmu.edu and XXXX@andrew.cmu.edu (Update XXXX with your team's emails)
+* **Team members**: abytha@andrew.cmu.edu and snittala@andrew.cmu.edu (Update XXXX with your team's emails)
 * **Online URL**: https://share.streamlit.io/CMU-IDS-Fall-2022/YYYY/master/streamlit_app.py (Update YYYY with your repo name)
 
 ## Instructions
