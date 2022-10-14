@@ -16,4 +16,6 @@ Our first task was to scope out the project and decide what exactly we wanted to
 ## Success Story
 An interesting insight we made while analyzing the data for this project is that migration patterns are heavily dependent on the parental income of the young adults moving. While anlyzing the data for multiple states, we saw that while White young adults moved the maximum in numbers away from their homes, it was interesting to note that young adults belonging to Quintile 5 (richest parental income) moved the most. In contrast, the Black and Hispanic young adults belonging to Quintile 1 (poorest parental income) moved the most.
 
-Note: Streanlit deployment issues. The app works fine locally. Numeric values are null when deployed. 
+#### Note:
+ - Streamlit deployment issues. The app works fine locally. Numeric values are null when deployed. 
+ - Original data file was processed using methods found in data_agg.py. The original data files are too large.
