@@ -183,7 +183,7 @@ race_dist = alt.Chart(
     .mark_text(filled=True, size=25, baseline='middle').encode(
         x=alt.X('Distance:Q', title="Distance moved in miles", axis=alt.Axis(grid=False),
                 scale=alt.Scale(domain=[0, miles_moved_race_df['Distance'].max()+200])),
-        text=alt.Text('icon'),
+        # text=alt.Text('icon'),
         tooltip=[alt.Tooltip('Distance:Q', title='Distance')]
     ).transform_filter(race_brush)
 
@@ -192,7 +192,7 @@ avg_dist = alt.Chart(
     height=75)\
     .mark_text(filled=True, size=25, baseline='middle').encode(
         x=alt.X('Value:Q', scale=alt.Scale(domain=[0, miles_moved_race_df['Distance'].max()+200])),
-        text=alt.Text('icon'),
+        # text=alt.Text('icon'),
         tooltip=[alt.Tooltip('Value:Q', title='Distance')]
     )
 
