@@ -176,6 +176,7 @@ avg_distance = global_average_distance(base_df, lat_lon_df)
 miles_moved_race_df['icon'] = ['👨', '👨', '👨', '👨', '👨']
 st.write(miles_moved_race_df)
 avg_df = pd.DataFrame({'Name': 'National Average', 'Value': avg_distance, 'icon': "🇺🇸"}, index=[0])
+st.write(avg_df)
 
 race_dist = alt.Chart(
     miles_moved_race_df,
