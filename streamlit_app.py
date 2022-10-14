@@ -1,12 +1,6 @@
-from email.policy import default
-import time
-from tkinter import font
-from matplotlib.pyplot import title
-
-import streamlit as st
-import pandas as pd
 import altair as alt
-
+import pandas as pd
+import streamlit as st
 from vega_datasets import data
 
 from usmap import migration_data, miles_moved_race, miles_moved_race_q, global_average_distance, race_data
