@@ -173,7 +173,8 @@ distance_moved_race_q_bar = alt.Chart(
 
 avg_distance = global_average_distance(base_df, lat_lon_df)
 
-miles_moved_race_df['icon'] = ["\N{man}", "\N{man}", "\N{man}", "\N{man}", "\N{man}"]
+# miles_moved_race_df['icon'] = ["\N{man}", "\N{man}", "\N{man}", "\N{man}", "\N{man}"]
+miles_moved_race_df['icon'] = ["m", "m", "m", "m", "m"]
 avg_df = pd.DataFrame({'Name': 'National Average', 'Value': avg_distance, 'icon': "US"}, index=[0])
 
 race_dist = alt.Chart(
