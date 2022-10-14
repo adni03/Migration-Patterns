@@ -70,23 +70,17 @@ def miles_moved_race(base_df, lat_lon_df, source):
     for race in counts_df['race'].unique():
         race_df = race_groups.get_group(race)
 
-        # numbers_array = np.abs(np.array(list(race_df['n'])).reshape((50,)))
-        numbers_array = [abs(ele) for ele in list(race_df['n'])]
+        numbers_array = np.abs(np.array(list(race_df['n'])).reshape((50,)))
         lat_list = list(race_df['Latitude'])
         lon_list = list(race_df['Longitude'])
 
-        distances = []
+        distances = np.zeros(50)
         for idx, dest_lat_lon in enumerate(zip(lat_list, lon_list)):
-            # distances[idx] = calc_distance(source_lat_lon, dest_lat_lon)
-            distances.append(calc_distance(source_lat_lon, dest_lat_lon))
+            distances[idx] = calc_distance(source_lat_lon, dest_lat_lon)
 
-        weighted_distance = 0
-        for i in range(50):
-            weighted_distance += numbers_array[i] * distances[i]
-        # weighted_distance = distances @ numbers_array
+        weighted_distance = distances @ numbers_array
         race_distance_dict['Race'].append(race)
-        # race_distance_dict['Distance'].append(np.round(weighted_distance/np.sum(numbers_array, axis=0), 2))
-        race_distance_dict['Distance'].append(weighted_distance/sum(numbers_array))
+        race_distance_dict['Distance'].append(np.round(weighted_distance/np.sum(numbers_array, axis=0), 2))
 
     return pd.DataFrame.from_dict(race_distance_dict, orient='columns')
 
