@@ -3,4 +3,5 @@ pandas
 altair
 numpy
 haversine
+vega_datasets
 
