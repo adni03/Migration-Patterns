@@ -86,6 +86,14 @@ def miles_moved_race(base_df, lat_lon_df, source):
 
 
 def miles_moved_race_q(base_df, lat_lon_df, source):
+    """
+        Function that takes the base dataframe and source, and calculates the weighted average of the distance
+        moved by each race and quintile
+        :param base_df: base dataframe
+        :param lat_lon_df: dataframe containing lat and lon for each state
+        :param source: selected state
+        :return: df with average distance moved for each race
+    """
     filter = (base_df['o_state_name'] == source) & (base_df['d_state_name'] != source)
     distance_df = base_df[filter].copy()
     distance_df.reset_index(drop=True, inplace=True)
@@ -96,8 +104,8 @@ def miles_moved_race_q(base_df, lat_lon_df, source):
     # Calculating miles moved
     race_groups = distance_df.groupby(['race'])
     race_distance_dict = {'Race': [],
-                          'Quintile': [],
-                          'Distance': []}
+                          'Quintile':[],
+                          'Distance':[]}
     source_lat_lon = (lat_lon_df[lat_lon_df['State'] == source]['Latitude'].item(),
                       lat_lon_df[lat_lon_df['State'] == source]['Longitude'].item())
 
@@ -124,6 +132,11 @@ def miles_moved_race_q(base_df, lat_lon_df, source):
 
 
 def global_average_distance(base_df, lat_lon_df):
+    '''
+    For each state, using it as the source, we extract migration_df. As we have the source, 
+    we use the latitude and longitude to calculate the distance betweent the states weighted 
+    by the number of people moved. 
+    '''
     distances_state_wise = []
 
     for state in lat_lon_df['State'].unique():

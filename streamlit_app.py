@@ -5,7 +5,7 @@ from vega_datasets import data
 
 from usmap import migration_data, miles_moved_race, miles_moved_race_q, global_average_distance, race_data
 
-st.title("How does race and parental income quintile influence how far young adults move from home for their first job?")
+st.title("How does race and parental income influence how far young adults move from home for their first job?")
 st.write("In this data science project we are interested in analyzing how race and the parental income of a young adult\
     influence how far they move for their first job. Here we use the Migration Patterns data whose sample includes \
     all children in the Census Numerical Identification Database (Numident) of Social Security Number holders who are \
@@ -17,7 +17,8 @@ st.write("In this data science project we are interested in analyzing how race a
     where “1” is the poorest parental income quintile and 5 is richest parental income quintile.")
 
 st.write('The US map shows the states young adults migrated to from a selected state highlighted in orange. It is \
-    followed by a bar chart which shows the Top 10 states the population moved to from that state.')
+    followed by a bar chart which shows the Top 10 states the population moved to from that state. Selecting a state on the map\
+    highlights the corresponding bar in the bar chart and vice versa.')
 
 @st.cache  # add caching so we load the data only once
 def load_data():
@@ -37,7 +38,6 @@ def load_data():
     lat_lon_df = lat_lon_df.sort_values(by=['State']).reset_index(drop=True)
 
     return base_df, lat_lon_df
-
 
 # Method call to load the required data
 base_df, lat_lon_df = load_data()
@@ -70,6 +70,7 @@ selection_chart = alt.Chart(states, width=2000, height=15) \
 )
 
 # Adding our data to the chart
+#https://altair-viz.github.io/gallery/choropleth.html
 migration_chart = alt.Chart(states, width=2000, height=15,
                             title='Choropleth showing the number of people migrating from {}'.format(source)) \
     .mark_geoshape(
@@ -94,6 +95,7 @@ migration_chart = alt.Chart(states, width=2000, height=15,
 usmap = alt.layer(selection_chart,
                   migration_chart).resolve_scale(color='independent')
 
+#https://stackoverflow.com/questions/63751130/altair-choropleth-map-color-highlight-based-on-line-chart-selection
 popular_state_bar = alt.Chart(
                         migration_df[migration_df['d_state_name'] != source].nlargest(10, 'n'),
                         title='Top 10 states young adults migrated to from {}'.format(source),
@@ -163,7 +165,7 @@ race_charts
 miles_moved_race_df = miles_moved_race(base_df, lat_lon_df, source)
 miles_moved_race_q_df = miles_moved_race_q(base_df, lat_lon_df, source)
 
-max_miles_dist = max(miles_moved_race_df['Distance'])
+max_miles_dist =  max(miles_moved_race_df['Distance'])
 max_miles_race = max(miles_moved_race_df[miles_moved_race_df['Distance'] == max_miles_dist]['Race'])
 
 max_miles_quin_dist = max(miles_moved_race_q_df.loc[miles_moved_race_q_df.Race == max_miles_race, 'Distance'])
@@ -210,6 +212,9 @@ distance_moved_race_q_bar = alt.Chart(
 
 avg_distance = global_average_distance(base_df, lat_lon_df)
 
+#Referred from 
+#https://altair-viz.github.io/gallery/isotype_emoji.html
+#https://medium.com/dataexplorations/how-to-add-emojis-to-an-altair-chart-f9bc02da3a4b
 miles_moved_race_df['icon'] = ['👨', '👨', '👨', '👨', '👨']
 avg_df = pd.DataFrame({'Name': 'National Average', 'Value': avg_distance, 'icon': '🇺🇸'}, index=[0])
 
