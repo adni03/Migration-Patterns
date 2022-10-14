@@ -41,7 +41,6 @@ def load_data():
 
 # Method call to load the required data
 base_df, lat_lon_df = load_data()
-st.write(lat_lon_df)
 
 # Drop down to list the available states
 states_options = lat_lon_df['State']
