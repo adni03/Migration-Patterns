@@ -176,30 +176,30 @@ avg_distance = global_average_distance(base_df, lat_lon_df)
 miles_moved_race_df['icon'] = ['👨', '👨', '👨', '👨', '👨']
 avg_df = pd.DataFrame({'Name': 'National Average', 'Value': avg_distance, 'icon': "🇺🇸"}, index=[0])
 
-# race_dist = alt.Chart(
-#     miles_moved_race_df,
-#     title="Distance moved by selected race compared to national average",
-#     height=75)\
-#     .mark_text(filled=True, size=25, baseline='middle').encode(
-#         x=alt.X('Distance:Q', title="Distance moved in miles", axis=alt.Axis(grid=False),
-#                 scale=alt.Scale(domain=[0, miles_moved_race_df['Distance'].max()+200])),
-#         text=alt.Text('icon'),
-#         tooltip=[alt.Tooltip('Distance:Q', title='Distance')]
-#     ).transform_filter(race_brush)
-#
-# avg_dist = alt.Chart(
-#     avg_df,
-#     height=75)\
-#     .mark_text(filled=True, size=25, baseline='middle').encode(
-#         x=alt.X('Value:Q', scale=alt.Scale(domain=[0, miles_moved_race_df['Distance'].max()+200])),
-#         text=alt.Text('icon'),
-#         tooltip=[alt.Tooltip('Value:Q', title='Distance')]
-#     )
-#
-# line = alt.Chart(pd.DataFrame({'y': [1]}))\
-#     .mark_rule().encode(y=alt.Y('y', axis=alt.Axis(tickSize=0, labelFontSize=0), title=None))
-#
-# dist_plot = race_dist + avg_dist + line
-# combo2 = alt.hconcat(distance_moved_race_bar, distance_moved_race_q_bar, center=True)
-# cc = alt.vconcat(combo2, dist_plot)
-# cc
+race_dist = alt.Chart(
+    miles_moved_race_df,
+    title="Distance moved by selected race compared to national average",
+    height=75)\
+    .mark_text(filled=True, size=25, baseline='middle').encode(
+        x=alt.X('Distance:Q', title="Distance moved in miles", axis=alt.Axis(grid=False),
+                scale=alt.Scale(domain=[0, miles_moved_race_df['Distance'].max()+200])),
+        text=alt.Text('icon'),
+        tooltip=[alt.Tooltip('Distance:Q', title='Distance')]
+    ).transform_filter(race_brush)
+
+avg_dist = alt.Chart(
+    avg_df,
+    height=75)\
+    .mark_text(filled=True, size=25, baseline='middle').encode(
+        x=alt.X('Value:Q', scale=alt.Scale(domain=[0, miles_moved_race_df['Distance'].max()+200])),
+        text=alt.Text('icon'),
+        tooltip=[alt.Tooltip('Value:Q', title='Distance')]
+    )
+
+line = alt.Chart(pd.DataFrame({'y': [1]}))\
+    .mark_rule().encode(y=alt.Y('y', axis=alt.Axis(tickSize=0, labelFontSize=0), title=None))
+
+dist_plot = race_dist + avg_dist + line
+combo2 = alt.hconcat(distance_moved_race_bar, distance_moved_race_q_bar, center=True)
+cc = alt.vconcat(combo2, dist_plot)
+cc
