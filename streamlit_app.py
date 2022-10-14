@@ -1,6 +1,13 @@
-import altair as alt
-import pandas as pd
+from email.policy import default
+import time
+from tkinter import font
+from matplotlib.pyplot import title
+from numpy import ma
+
 import streamlit as st
+import pandas as pd
+import altair as alt
+
 from vega_datasets import data
 
 from usmap import migration_data, miles_moved_race, miles_moved_race_q, global_average_distance, race_data
@@ -11,7 +18,7 @@ st.write("In this data science project we are interested in analyzing how race a
     all children in the Census Numerical Identification Database (Numident) of Social Security Number holders who are \
     born in the U.S. between 1984-92. Child race is measured using information from the 2010 Decennial Census and American \
     Community Survey (ACS). In this dataset we have 5 unique values for race- Asian, Black, Hispanic, White, and Other. \
-    Location at age 16 and 26 is assigned using Census, tax, and HUD information \
+    Location at age 16 and 26 is assigned using Census, tax, and HUD information. \
     Parental income is measured as a 5-year average of family income when the children are aged 14-18 based on the \
     tax form 1040 of the parent who claims them as a dependent. The values for these quintiles are integers from 1 to 5 \
     where “1” is the poorest parental income quintile and 5 is richest parental income quintile.")
@@ -99,7 +106,7 @@ popular_state_bar = alt.Chart(
                         title='Top 10 states young adults migrated to from {}'.format(source),
                         width=600).\
                         mark_bar().encode(
-                            x=alt.X('n', title="Number of people who moved"),
+                            x=alt.X('n', title="Population migrating"),
                             opacity=alt.condition(click, alt.value(1), alt.value(0.2)),
                             color=alt.Color('n:Q', legend=None),
                             y=alt.Y('d_state_name', sort='-x', title="Destination States"),
@@ -109,28 +116,44 @@ popular_state_bar = alt.Chart(
 combo = alt.vconcat(usmap, popular_state_bar, center=True)
 combo
 
-st.subheader("Movement by race")
-st.write('Let us now analyze the influence of race in the movement of population. For the state of {},\
-    the bar chart shows the number of people who moved out of the state by each race. Additionally, on clicking the bar \
-    corresponding to a particular race, the bar chart shows the number of people who moved in that race by the \
-    parental income quintile.'.format(source))
-
 race_df, quintile_df = race_data(base_df, source)
+max_race =  max(race_df['race'])
+max_quin_pop = max(quintile_df[quintile_df['race'] == max_race]['n'])
+max_quin = quintile_df.loc[quintile_df.n == max_quin_pop, 'quintile'].values[0]
 
-brush = alt.selection_single(encodings=["y"], init={'race':'Asian'}, empty='none')
+st.subheader("Influence of Race and Parental Income on the number of young adults migrating")
+st.write('Let us now analyze the influence of race in the movement of population. For the state of {},\
+    the bar chart shows the number of people who moved out of the state by each race. The quintile chart shows the distribution \
+    of population migrated in each parental income quintile. According to this dataset, Quintile **1** is the poorest \
+    parental income quintile and **5** is richest parental income quintile'.format(source))
+    
+st.write('In state of **{}**,'.format(source))
+st.markdown('- Young adults belonging to the **{}** race move the maximum. '.format(max_race))
+st.markdown('- Within the race, the young adults belonging to Quintile **{}** move the most.'.format(max_quin))
+   
+st.write('Additionally, on clicking the bar corresponding to a particular race, the pie chart shows the number \
+    of people who moved in that race by the parental income quintile.')
+
+st.subheader('Insights:')
+st.write('From analyzing the charts for a majority of the states, it was evident that the White young adults \
+    moved the maximum in numbers away from their homes. Within this, it was interesting to note that young adults \
+    belonging to Quintile 5 moved the most. In contrast, the Black and Hispanic young adults belonging to Quintile 1 \
+    moved the most.')
+brush = alt.selection_single(encodings=["y"], init={'race': max_race}, empty='none')
 
 race_barchart = alt.Chart(race_df, 
 title='Population migration from {} by Race'.format(source),
-    width=350).mark_bar().encode(
-    x=alt.X('n', title="Number of people who moved"),
+    width=420).mark_bar().encode(
+    x=alt.X('n', title="Population migrating"),
     y=alt.Y('race', title="Race"),
     opacity = alt.condition(brush, alt.value(1), alt.value(0.8)),
     tooltip=[alt.Tooltip('n:Q', title="# of people")]
 ).add_selection(brush)
 
-race_quintile_chart = alt.Chart(quintile_df).encode(
-    theta=alt.Theta("n:Q", stack=True),
-    color=alt.Color("quintile:N", legend=alt.Legend(title="Quintile")),
+race_quintile_chart = alt.Chart(quintile_df, 
+    title = 'Population migrating by selected race').encode(
+    theta=alt.Theta("n:Q", stack=True), color=alt.Color("quintile:N"),
+    tooltip=[alt.Tooltip('quintile:N', title='Quintile')]
 ).transform_filter(brush)
 
 pie = race_quintile_chart.mark_arc(outerRadius=100, innerRadius = 60)
@@ -143,10 +166,31 @@ race_quintile_chart_comb = pie + text
 race_charts = alt.hconcat(race_barchart, race_quintile_chart_comb, center=True)
 race_charts
 
-st.subheader('Distance moved by each race')
 
 miles_moved_race_df = miles_moved_race(base_df, lat_lon_df, source)
 miles_moved_race_q_df = miles_moved_race_q(base_df, lat_lon_df, source)
+
+max_miles_dist =  max(miles_moved_race_df['Distance'])
+max_miles_race = max(miles_moved_race_df[miles_moved_race_df['Distance'] == max_miles_dist]['Race'])
+
+max_miles_quin_dist = max(miles_moved_race_q_df.loc[miles_moved_race_q_df.Race == max_miles_race, 'Distance'])
+max_miles_quin = miles_moved_race_q_df.loc[miles_moved_race_q_df.Distance == max_miles_quin_dist, 'Quintile'].values[0]
+
+st.subheader("Influence of Race and Parental Income on the distance young adults migrate")
+st.write('In state of **{}**,'.format(source))
+st.markdown('- Young adults belonging to the **{}** race move the farthest from their homes. '.format(max_miles_race))
+st.markdown('- Within the race, the young adults belonging to Quintile **{}** move the most.'.format(max_miles_quin))
+   
+st.write('Additionally, on clicking the bar corresponding to a particular race, the bar chart shows the number \
+    of people who moved in that race by the parental income quintile. The bar chart below also shows the average \
+    distance moved in miles as compared to the national average for the selected race.')
+
+
+st.subheader('Insights:')
+st.write('From analyzing the charts for a majority of the states, it was evident that on average Asian young adults moved the \
+    farthest away from their homes. In addition on observing the quintiles we noticed that young adults belonging to \
+    Quintile 4 or 5 moved the farthest distances. However, this cannot be generalized, the distance moved by different races \
+    depends on the state as well.')
 
 race_brush = alt.selection_single(encodings=['y'])
 distance_moved_race_bar = alt.Chart(
@@ -165,8 +209,8 @@ distance_moved_race_q_bar = alt.Chart(
                                 width=180,
                                 title='Average distance moved by each quintile from {}'.format(source))\
                                 .mark_bar().encode(
-                                    y=alt.Y('Distance:Q', title='Income Quantile'),
-                                    x=alt.X('Quintile:O', title="Distance moved in miles"),
+                                    y=alt.Y('Distance:Q', title='Distance moved in miles'),
+                                    x=alt.X('Quintile:O', title="Income Quantile"),
                                     tooltip=[alt.Tooltip('Distance:Q', title='Distance moved')],
                                     color='Race'
                                 ).transform_filter(race_brush)
@@ -174,13 +218,11 @@ distance_moved_race_q_bar = alt.Chart(
 avg_distance = global_average_distance(base_df, lat_lon_df)
 
 miles_moved_race_df['icon'] = ['👨', '👨', '👨', '👨', '👨']
-st.write(miles_moved_race_df)
-avg_df = pd.DataFrame({'Name': 'National Average', 'Value': avg_distance, 'icon': "🇺🇸"}, index=[0])
-st.write(avg_df)
+avg_df = pd.DataFrame({'Name': 'National Average', 'Value': avg_distance, 'icon': '🇺🇸'}, index=[0])
 
 race_dist = alt.Chart(
     miles_moved_race_df,
-    title="Distance moved by selected race compared to national average",
+    title="Distance moved by selected race vs National Average",
     height=75)\
     .mark_text(filled=True, size=25, baseline='middle').encode(
         x=alt.X('Distance:Q', title="Distance moved in miles", axis=alt.Axis(grid=False),
