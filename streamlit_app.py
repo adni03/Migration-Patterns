@@ -163,7 +163,7 @@ race_charts
 miles_moved_race_df = miles_moved_race(base_df, lat_lon_df, source)
 miles_moved_race_q_df = miles_moved_race_q(base_df, lat_lon_df, source)
 
-max_miles_dist =  max(miles_moved_race_df['Distance'])
+max_miles_dist = max(miles_moved_race_df['Distance'])
 max_miles_race = max(miles_moved_race_df[miles_moved_race_df['Distance'] == max_miles_dist]['Race'])
 
 max_miles_quin_dist = max(miles_moved_race_q_df.loc[miles_moved_race_q_df.Race == max_miles_race, 'Distance'])
