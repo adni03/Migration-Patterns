@@ -1,7 +1,7 @@
 import pandas as pd
 import haversine as hs
 from haversine import Unit
-# import numpy as np
+import numpy as np
 
 
 def migration_data(base_df, lat_lon_df, source):
@@ -71,7 +71,7 @@ def miles_moved_race(base_df, lat_lon_df, source):
         race_df = race_groups.get_group(race)
 
         # numbers_array = np.abs(np.array(list(race_df['n'])).reshape((50,)))
-        numbers_array = abs(list(race_df['n']))
+        numbers_array = [abs(ele) for ele in list(race_df['n'])]
         lat_list = list(race_df['Latitude'])
         lon_list = list(race_df['Longitude'])
 
