@@ -2,6 +2,8 @@
 
 ![A screenshot of your application. Could be a GIF.](IDS_Screenshot.PNG)
 
+Linl: https://adni03-migration-patterns-streamlit-app-px2bq5.streamlit.app/
+
 The aim of this data science project is to analyze the influence of race and parental income on the migration patterns of young adults for their first job away from home. 
 
 ## Project Goals
