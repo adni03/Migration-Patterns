@@ -20,7 +20,7 @@ st.write('The US map shows the states young adults migrated to from a selected s
     followed by a bar chart which shows the Top 10 states the population moved to from that state. Selecting a state on the map\
     highlights the corresponding bar in the bar chart and vice versa.')
 
-@st.cache  # add caching so we load the data only once
+@st.cache_data  # add caching so we load the data only once
 def load_data():
     """
     Method to load relevant files:
