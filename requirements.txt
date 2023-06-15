@@ -1,6 +1,6 @@
 streamlit
 pandas
-altair
+altair==4.2
 numpy
 vega_datasets
 haversine
